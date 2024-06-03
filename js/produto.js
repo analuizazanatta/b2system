@@ -205,7 +205,8 @@ function alterarProduto(codigo) {
 function executaConsulta() {
     // Listando todos os produtos
     const method = "POST";
-    const valor1 = parseInt(document.querySelector("#campoValor1").value);
+    // const valor1 = parseInt(document.querySelector("#campoValor1").value);
+    const valor1 = document.querySelector("#campoValor1").value;
 
     console.log("codigo: " + valor1);
 
