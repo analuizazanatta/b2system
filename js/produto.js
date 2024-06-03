@@ -211,7 +211,7 @@ function executaConsulta() {
 
     // FIXO, MUDAR CAMPO DINAMICO, DEPOIS
     let body = {
-        campo:"id",
+        campo:"codigoConsulta",
         operador: "=",
         valor1:valor1
     }
