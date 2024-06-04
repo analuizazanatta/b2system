@@ -203,18 +203,16 @@ function alterarProduto(codigo) {
 }
 
 function executaConsulta() {
-    // Listando todos os produtos
     const method = "POST";
-    // const valor1 = parseInt(document.querySelector("#campoValor1").value);
+    const filtroConsulta = document.querySelector('#filtroConsulta').value;
     const valor1 = document.querySelector("#campoValor1").value;
+    const valor2 = document.querySelector("#campoValor2").value;
 
-    console.log("codigo: " + valor1);
-
-    // FIXO, MUDAR CAMPO DINAMICO, DEPOIS
     let body = {
-        campo:"codigoConsulta",
+        campo: filtroConsulta,
         operador: "=",
-        valor1:valor1
+        valor1: valor1,
+        valor2: valor2
     }
 
     const rota = "consultaproduto";
