@@ -1,27 +1,7 @@
 var ACAO_INCLUSAO = "ACAO_INCLUSAO";
 var ACAO_ALTERACAO = "ACAO_ALTERACAO";
 
-function listarProdutosConsulta() {
-    // Listando todos os produtos
-    const method = "GET";
-
-    const codigo = parseInt(document.querySelector("#codigoConsulta").value);
-    let filtroCodigo = "";
-    if (codigo > 0) {
-        filtroCodigo = "/?id=" + codigo;
-    }
-
-    const rota = "produto" + filtroCodigo;
-    
-    callApi(method, rota, function (data) {
-        console.log("Dados da API:");
-        console.log(data);
-
-        carregaTabelaConsulta(data);
-    });
-}
-
-function carregaTabelaConsulta(aListaProdutos) {
+function carregaTabelaConsultaProduto(aListaProdutos) {
     // Se não for array, coloca como array
     if (!Array.isArray(aListaProdutos)) {
         aListaProdutos = new Array(aListaProdutos);
@@ -43,10 +23,10 @@ function carregaTabelaConsulta(aListaProdutos) {
             <td>` +
             codigo +
             `</td>
-            <td>` +
+            <td style="text-align: left;">` +
             descricao +
             `</td>
-            <td>` +
+            <td style="text-align: right;">` +
             preco +
             `</td>
             <td>` +
@@ -64,12 +44,12 @@ function carregaTabelaConsulta(aListaProdutos) {
 function getAcoes(codigo) {
     return (
         `<div class="acoes">
-                <button onclick="alterarProduto(` +
+                <button  class="btn btn-consulta" onclick="alterarProduto(` +
         codigo +
         `)">Alterar</button>
-                <button onclick="excluirProduto(` +
+                <button  class="btn btn-consulta" onclick="excluirProduto(` +
         codigo +
-        `)">Excluir</button>                
+        `)">Excluir</button>
             </div>
     `
     );
@@ -166,12 +146,18 @@ function confirmarModal() {
 }
 
 function excluirProduto(codigo) {
+    alert("ACAO EXCLUIR NAO PROGRAMADA AINDA!");
+    return true;
+
     const method = "DELETE";
     const rota = "produtos/" + codigo;
     callApi(method, rota);
 }
 
 function alterarProduto(codigo) {
+    alert("ACAO ALTERAR NAO PROGRAMADA AINDA!");
+    return true;
+
     const modal = document.querySelector("dialog");
     modal.showModal();
 
@@ -202,25 +188,62 @@ function alterarProduto(codigo) {
     });
 }
 
-function executaConsulta() {
+function executaConsulta(rota = "consultaproduto") {
+    // Listando todos os produtos
     const method = "POST";
-    const filtroConsulta = document.querySelector('#filtroConsulta').value;
-    
-    const valor1 = document.querySelector("#campoValor1").value;
-    const valor2 = document.querySelector("#campoValor2").value;
+    let valor1 = document.querySelector("#campoValor1").value;
+    let valor2 = document.querySelector("#campoValor2").value;
 
-    let body = {
-        campo: filtroConsulta,
-        operador: "=",
-        valor1: valor1,
-        valor2: valor2
+    const operadorConsulta = document.querySelector("#operadorConsulta").value;
+    const campoValor = document.querySelector("#filtroConsulta").value;
+    const campoConsulta = document.querySelector("#" + campoValor);
+    const tipoCampoConsulta = campoConsulta.getAttribute("data-tipo");
+
+    console.log("campo: " + campoValor);
+    console.log("operador: " + operadorConsulta);
+    console.log("tipoCampoConsulta: " + tipoCampoConsulta);
+    console.log("valor1: " + valor1);
+    console.log("valor2: " + valor2);
+
+    if (tipoCampoConsulta == "numerico") {
+        // valor1 = onlyNumbers(valor1);
+        // valor2 = onlyNumbers(valor2);
     }
 
-    const rota = "consultaproduto";
-    
-    callApiPost(method, rota, function (data) {
-        console.log("Dados da API:");
-        console.log(data);
-        carregaTabelaConsulta(data);
-    }, body);
+    let body = {
+        campo: campoValor,
+        operador: parseOperador(operadorConsulta),
+        valor1: valor1,
+        valor2: valor2,
+    };
+
+    callApiPost(
+        method,
+        rota,
+        function (data) {
+            if (rota === "consultaproduto") {
+                carregaTabelaConsultaProduto(data);
+            } else {
+                alert("Consulta nao desenvolvida!");
+            }
+        },
+        body
+    );
+}
+
+function parseOperador(operador) {
+    if (operador === "igual") {
+        return "=";
+    }
+    if (operador === "contem") {
+        return "ilike";
+    }
+    if (operador === "contido") {
+        return "in";
+    }
+    if (operador === "naocontido") {
+        return "not in";
+    }
+
+    return "todos";
 }

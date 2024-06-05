@@ -1,3 +1,19 @@
+function getUrlBase() {
+    return "http://localhost:8080/api/";
+}
+
+function getVersao() {
+    if (isAluno()) {
+        return "";
+    }
+
+    return "v1/";
+}
+
+function isAluno() {
+    return false;
+}
+
 function getHeaders() {
     return {
         "Content-Type": "application/json",
@@ -6,21 +22,18 @@ function getHeaders() {
 }
 
 function callApi(method, rota, fn = false) {
-    // const url = "http://localhost:3000/" + rota;
-    // CAMINHO DA API JAVA
-    const url = "http://localhost:8080/api/v1/" + rota;
-    // const url = "http://127.0.0.1:8080/api/v1/" + rota;
+    const url = getUrlBase() + getVersao() + rota;
 
     try {
         fetch(url, {
-                method: method, // *GET, POST, PUT, DELETE, etc.
-                mode: "cors", // no-cors, *cors, same-origin
-                cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: "same-origin", // include, *same-origin, omit
-                headers: getHeaders(),
-                redirect: "follow", // manual, *follow, error
-                referrerPolicy: "no-referrer",
-            })
+            method: method, // *GET, POST, PUT, DELETE, etc.
+            mode: "cors", // no-cors, *cors, same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, *same-origin, omit
+            headers: getHeaders(),
+            redirect: "follow", // manual, *follow, error
+            referrerPolicy: "no-referrer",
+        })
             .then((response) => response.json())
             .then((data) => {
                 let oRetorno = JSON.stringify(data);
@@ -39,20 +52,20 @@ function callApi(method, rota, fn = false) {
 }
 
 function callApiPost(method, rota, fn = false, body = false) {
-    // const url = "http://localhost:3000/" + rota;
-    const url = "http://localhost:8080/api/v1/" + rota;
-    // const url = "http://127.0.0.1:8080/api/v1/" + rota;
+    const url = getUrlBase() + getVersao() + rota;
+
+    console.log("url chamada:" + url);
     try {
         fetch(url, {
-                method: method, // *GET, POST, PUT, DELETE, etc.
-                mode: "cors", // no-cors, *cors, same-origin
-                cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: "same-origin", // include, *same-origin, omit
-                headers: getHeaders(),
-                redirect: "follow", // manual, *follow, error
-                referrerPolicy: "no-referrer",
-                body: JSON.stringify(body),
-            })
+            method: method, // *GET, POST, PUT, DELETE, etc.
+            mode: "cors", // no-cors, *cors, same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, *same-origin, omit
+            headers: getHeaders(),
+            redirect: "follow", // manual, *follow, error
+            referrerPolicy: "no-referrer",
+            body: JSON.stringify(body),
+        })
             .then((response) => response.json())
             .then((data) => {
                 let oRetorno = JSON.stringify(data);
