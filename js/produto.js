@@ -205,6 +205,7 @@ function alterarProduto(codigo) {
 function executaConsulta() {
     const method = "POST";
     const filtroConsulta = document.querySelector('#filtroConsulta').value;
+    
     const valor1 = document.querySelector("#campoValor1").value;
     const valor2 = document.querySelector("#campoValor2").value;
 
