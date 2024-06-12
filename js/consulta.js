@@ -12,19 +12,18 @@ function atualizaTipoConsulta() {
     const campoConsulta = document.querySelector("#" + campoValor);
     const tipoCampoConsulta = campoConsulta.getAttribute("data-tipo");
 
-    console.log("data: " + tipoCampoConsulta);
-
     atualizaListaOperadoresConsulta(tipoCampoConsulta);
 }
 
 function atualizaListaOperadoresConsulta(tipoCampoConsulta) {
     const operadores = document.querySelector("#operadorConsulta");
     operadores.innerHTML = "";
+    operadores.innerHTML += `<option value='todos' selected>Todos</option>`;
 
     if (tipoCampoConsulta == TIPO_CAMPO_NUMERICO) {
         operadores.innerHTML += `<option value='menor_igual'>Menor ou Igual</option>`;
         operadores.innerHTML += `<option value='menor_que'>Menor que</option>`;
-        operadores.innerHTML += `<option value='igual' selected>Igual</option>`;
+        operadores.innerHTML += `<option value='igual'>Igual</option>`;
         operadores.innerHTML += `<option value='diferente'>Diferente de</option>`;
         operadores.innerHTML += `<option value='maior_que'>Maior que</option>`;
         operadores.innerHTML += `<option value='maior_igual'>Maior ou igual</option>`;
@@ -32,7 +31,7 @@ function atualizaListaOperadoresConsulta(tipoCampoConsulta) {
         operadores.innerHTML += `<option value='contido'>Contido em</option>`;
         operadores.innerHTML += `<option value='naocontido'>Não Contido em</option>`;
     } else if (tipoCampoConsulta == TIPO_CAMPO_TEXTO) {
-        operadores.innerHTML += `<option value='contem' selected>Contém</option>`;
+        operadores.innerHTML += `<option value='contem'>Contém</option>`;
         operadores.innerHTML += `<option value='naocontem' >Não Contém</option>`;
         operadores.innerHTML += `<option value='igual'>Igual</option>`;
         operadores.innerHTML += `<option value='diferente'>Diferente de</option>`;

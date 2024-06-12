@@ -44,10 +44,10 @@ function carregaTabelaConsultaProduto(aListaProdutos) {
 function getAcoes(codigo) {
     return (
         `<div class="acoes">
-                <button  class="btn btn-consulta" onclick="alterarProduto(` +
+                <button class="btn btn-warning" onclick="alterarProduto(` +
         codigo +
         `)">Alterar</button>
-                <button  class="btn btn-consulta" onclick="excluirProduto(` +
+                <button  class="btn btn-danger" onclick="excluirProduto(` +
         codigo +
         `)">Excluir</button>
             </div>
@@ -65,28 +65,6 @@ function incluirProduto() {
     const modal = document.querySelector("dialog");
     modal.showModal();
     modal.style.display = "block";
-    proximoId(function (codigo) {
-        document.querySelector("#codigo").value = codigo;
-    });
-}
-
-function proximoId(fn = false) {
-    // REGRA DE NEGOCIOS
-    // PROXIMO ID = TOTAL DE PRODUTOS + 1
-
-    let totalProdutos = 0;
-    // buscar na API TODOS OS PRODUTO E CONTAR
-
-    const method = "GET";
-    const rota = "produtos";
-    callApi(method, rota, function (data) {
-        totalProdutos = data.length;
-
-        totalProdutos = parseInt(totalProdutos + 1);
-        if (fn) {
-            fn(totalProdutos);
-        }
-    });
 }
 
 function confirmarModal() {
@@ -146,45 +124,37 @@ function confirmarModal() {
 }
 
 function excluirProduto(codigo) {
-    alert("ACAO EXCLUIR NAO PROGRAMADA AINDA!");
-    return true;
-
     const method = "DELETE";
     const rota = "produto/" + codigo;
-    callApi(method, rota);
+    callApi(method, rota, function(data){
+        executaConsulta("consultaproduto");
+    });    
 }
 
 function alterarProduto(codigo) {
-    alert("ACAO ALTERAR NAO PROGRAMADA AINDA!");
-    return true;
-
     const modal = document.querySelector("dialog");
     modal.showModal();
+    modal.style.display = "block";
 
-    // DADOS DE ALTERACAO DO PRODUTO
     const method = "GET";
-    // http://localhost:3000/produtos/?id=2
-    const rota = "produtos/?id=" + codigo;
-    callApi(method, rota, function (aListaProdutos) {
-        console.log(aListaProdutos);
+    const rota = "produto/" + codigo;
+    callApi(method, rota, function (data) {
+        console.log(data);
+        const codigo = data.id;
 
-        aListaProdutos.forEach(function (data, key) {
-            const codigo = data.id;
+        console.log("codigo da alteracao:" + codigo);
 
-            console.log("codigo da alteracao:" + codigo);
+        const descricao = data.descricao;
+        const preco = data.preco;
+        const estoque = data.estoque;
 
-            const descricao = data.descricao;
-            const preco = data.preco;
-            const estoque = data.estoque;
+        document.querySelector("#codigo").value = codigo;
+        document.querySelector("#descricao").value = descricao;
+        document.querySelector("#preco").value = preco;
+        document.querySelector("#estoque").value = estoque;
 
-            document.querySelector("#codigo").value = codigo;
-            document.querySelector("#descricao").value = descricao;
-            document.querySelector("#preco").value = preco;
-            document.querySelector("#estoque").value = estoque;
-
-            // MUDAR A ACAO PARA "ALTERACAO"
-            document.querySelector("#ACAO").value = ACAO_ALTERACAO;
-        });
+        // MUDAR A ACAO PARA "ALTERACAO"
+        document.querySelector("#ACAO").value = ACAO_ALTERACAO;       
     });
 }
 
