@@ -1,7 +1,7 @@
 var ACAO_INCLUSAO = "ACAO_INCLUSAO";
 var ACAO_ALTERACAO = "ACAO_ALTERACAO";
 
-function carregaTabelaConsultaProduto(aListaProdutos) {
+function carregaTabelaConsulta(aListaProdutos) {
     // Se não for array, coloca como array
     if (!Array.isArray(aListaProdutos)) {
         aListaProdutos = new Array(aListaProdutos);
@@ -11,9 +11,10 @@ function carregaTabelaConsultaProduto(aListaProdutos) {
     tabela.innerHTML = "";
     aListaProdutos.forEach(function (data, key) {
         const codigo = data.id;
-        const descricao = data.descricao;
-        const preco = data.preco;
-        const estoque = data.estoque;
+        const nome   = data.nome;
+        const cpf    = data.cpf;
+        const cidade = data.cidade;
+        const estado = data.estado;
 
         const acoes = getAcoes(codigo);
 
@@ -24,14 +25,17 @@ function carregaTabelaConsultaProduto(aListaProdutos) {
             codigo +
             `</td>
             <td style="text-align: left;">` +
-            descricao +
+            nome +
             `</td>
             <td style="text-align: right;">` +
-            preco +
+            cpf +
             `</td>
             <td>` +
-            estoque +
+            cidade +
             `</td>
+            <td>` +
+            estado +
+            `</td>            
             <td>` +
             acoes +
             `</td>
@@ -78,6 +82,7 @@ function incluirProduto() {
 
 function confirmarModal() {
     const acao = document.querySelector("#ACAO").value;
+
     if (acao == ACAO_INCLUSAO) {
         const descricao = document.querySelector("#descricao").value;
         const preco = document.querySelector("#preco").value;
@@ -166,13 +171,18 @@ function alterarProduto(codigo) {
     });
 }
 
-function executaConsulta(rota = "consultaproduto") {
-    // Listando todos os produtos
+function executaConsulta(rota = "consultacliente") {
+    const operadorConsulta = document.querySelector("#operadorConsulta").value;
+    
+    if((operadorConsulta != "igual") && (operadorConsulta != "todos")){
+        alert("Operador nao desenvolvido!");
+        return false;
+    }
+
     const method = "POST";
     let valor1 = document.querySelector("#campoValor1").value;
     let valor2 = document.querySelector("#campoValor2").value;
 
-    const operadorConsulta = document.querySelector("#operadorConsulta").value;
     const campoValor = document.querySelector("#filtroConsulta").value;
     const campoConsulta = document.querySelector("#" + campoValor);
     const tipoCampoConsulta = campoConsulta.getAttribute("data-tipo");
@@ -202,7 +212,9 @@ function executaConsulta(rota = "consultaproduto") {
         rota,
         function (data) {
             if (rota === "consultaproduto") {
-                carregaTabelaConsultaProduto(data);
+                carregaTabelaConsulta(data);
+            } else if (rota === "consultacliente") {
+                carregaTabelaConsulta(data);
             } else {
                 alert("Consulta nao desenvolvida!");
             }
